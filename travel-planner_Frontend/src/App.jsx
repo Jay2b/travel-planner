@@ -1,35 +1,67 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [trips, setTrips] = useState([]);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+
+  function fetchTrips() {
+    fetch(`http://localhost:3000/trips`)
+      .then((res) => res.json())
+      .then((data) => setTrips(data))
+      .catch((err) => console.log(err));
+  }
+
+  useEffect(() => {
+    fetchTrips();
+  }, []);
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    fetch(`http://localhost:3000/trips`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        description,
+      }),
+    })
+      .then((res) => res.json())
+      .then((newTrip) => {
+        setName("");
+        setDescription("");
+        fetchTrips();
+      })
+      .catch((err) => console.log(err));
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Trips</h1>
+      <form onSubmit={handleSubmit}>
+        <p>Name</p>
+        <input
+          type='text'
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <p>Description</p>
+        <input
+          type='text'
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <button type='submit'>Send</button>
+      </form>
+      {trips.map((trip) => (
+        <div key={trip.id}>
+          <h3>{trip.name}</h3>
+          <p>{trip.description}</p>
+        </div>
+      ))}
     </>
-  )
+  );
 }
 
-export default App
+export default App;

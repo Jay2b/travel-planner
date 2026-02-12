@@ -1,5 +1,4 @@
-const sqlite3 =
-  require("./.gitignore/node_modules/sqlite3/lib/sqlite3").verbose();
+const sqlite3 = require("sqlite3").verbose();
 
 const db = new sqlite3.Database("./trips.db", (err) => {
   if (err) {
