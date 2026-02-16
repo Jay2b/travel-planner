@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+import TripForm from "./components/TripForm";
+import TripList from "./components/TripList";
+
 
 function App() {
   const [trips, setTrips] = useState([]);
@@ -80,32 +83,22 @@ function App() {
   }
 
   return (
-    <>
+    <div className="container">
       <h1>Trips</h1>
-      <form onSubmit={handleSubmit}>
-        <p>Name</p>
-        <input
-          type='text'
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <p>Description</p>
-        <input
-          type='text'
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <button type='submit'>{editingId ? "Update Trip" : "Add Trip"}</button>
-      </form>
-      {trips.map((trip) => (
-        <div key={trip.id}>
-          <h3>{trip.name}</h3>
-          <p>{trip.description}</p>
-          <button onClick={() => deleteTrip(trip.id)}>Delete</button>
-          <button onClick={() => startEdit(trip)}>Edit</button>
-        </div>
-      ))}
-    </>
+    {/* Render Form */}
+      <TripForm 
+      name = {name} 
+      description={description}
+      setName={setName}
+      setDescription={setDescription}
+      onSubmit={handleSubmit}
+      editingId={editingId}/>  
+  {/* Render List */}
+    <TripList 
+      trips={trips}
+      onDelete ={deleteTrip}
+      onEdit ={startEdit}/>
+    </div>
   );
 }
 
