@@ -10,8 +10,10 @@ function App() {
   const [description, setDescription] = useState("");
   const [editingId, setEditingId] = useState(null);
 
+  const API_URL = "https://travel-planner-6toc.onrender.com";
+
   function fetchTrips() {
-    fetch(`http://localhost:3000/trips`)
+    fetch(`${API_URL}/trips`)
       .then((res) => res.json())
       .then((data) => setTrips(data))
       .catch((err) => console.log(err));
@@ -28,7 +30,7 @@ function App() {
     if (editingId) {
       updateTrip(editingId);
     } else {
-      fetch(`http://localhost:3000/trips`, {
+      fetch(`${API_URL}/trips`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -48,7 +50,7 @@ function App() {
 
   //Delete The trip
   function deleteTrip(id) {
-    fetch(`http://localhost:3000/trips/${id}`, {
+    fetch(`${API_URL}/trips/${id}`, {
       method: "DELETE",
     }).then(() => {
       setTrips((values) => {
@@ -59,7 +61,7 @@ function App() {
 
   //Edit Trip
   function updateTrip(id) {
-    fetch(`http://localhost:3000/trips/${id}`, {
+    fetch(`${API_URL}/trips/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
